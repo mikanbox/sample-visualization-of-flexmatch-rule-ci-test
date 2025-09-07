@@ -5,12 +5,18 @@ import sys
 import logging
 from datetime import datetime
 from nova_act import NovaAct
+from pydantic import BaseModel
+
+class ActResults(BaseModel):
+    actProcessEnglishExplanation: str
+    actResultEnglishExplanation: str
+
 
 def run_test():
     # ログの設定
     log_file = f"nova_act_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(message)s',
         handlers=[
             logging.FileHandler(log_file),
@@ -18,6 +24,7 @@ def run_test():
         ]
     )
     
+
     logging.info("=== Nova Act テスト実行開始 ===")
     start_time = datetime.now()
     
@@ -39,11 +46,11 @@ def run_test():
     nova.start()
     for i, prompt in enumerate(tasks, 1):
         logging.info(f"タスク {i}: {prompt}")
-        result = nova.act(prompt)
+        result = nova.act(prompt, schema=ActResults.model_json_schema())
         
         # 結果をログに記録
         logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
-        logging.info(f"応答: {result.response}")
+        logging.info(f"応答: {result.response.actProcessEnglishExplanation}")
         
         results.append({
             "task": i,
@@ -52,6 +59,11 @@ def run_test():
             "steps": result.metadata.num_steps_executed,
             "act_id": result.metadata.act_id
         })
+
+
+
+
+
     
     # 実行完了
     end_time = datetime.now()
@@ -76,7 +88,7 @@ def run_test():
     logging.info(f"合計タスク数: {len(tasks)}")
     logging.info(f"合計実行時間: {duration:.2f}秒")
     logging.info(f"サマリーを {summary_file} に出力しました")
-    
+        
     return 0  # 成功
 
 
@@ -85,13 +97,3 @@ if __name__ == "__main__":
     print("Start Testing ")
 
     sys.exit(run_test())
-
-
-
-
-
-
-
-
-
-
