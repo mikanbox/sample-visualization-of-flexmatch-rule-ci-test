@@ -51,5 +51,5 @@ jobs:
           python tests/main.py 
       
       - name: Upload GitHub Summary
-      run: cat nova_act_summary.txt >> $GITHUB_STEP_SUMMARY
+        run: cat nova_act_summary.txt >> $GITHUB_STEP_SUMMARY
 
