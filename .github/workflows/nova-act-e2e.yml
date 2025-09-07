@@ -49,4 +49,7 @@ jobs:
           NOVA_ACT_API_KEY: ${{ secrets.NOVA_ACT_API_KEY }}
         run: |
           python tests/main.py 
+      
+      - name: Upload GitHub Summary
+      run: cat nova_act_summary.txt >> $GITHUB_STEP_SUMMARY
 
