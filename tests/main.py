@@ -3,9 +3,11 @@
 
 import sys
 import logging
+import json
 from datetime import datetime
 from nova_act import NovaAct
 from pydantic import BaseModel
+import ast
 
 class ActResults(BaseModel):
     actProcessEnglishExplanation: str
@@ -35,14 +37,10 @@ def run_test():
                headless=True,
                )
     
-    # 各actの実行と結果の収集
-    tasks = [
-        "FlexMatch JSON ルールをロードするボタンをクリックして",
-        "いずれかのルールを選択して",
-        "OKを押して JSON をロードして",
-        "Visualize ボタンを押して",
-        "表示されたルールの名前とチーム構造を確認して"
-    ]
+    # タスクリストをJSONファイルから読み込む
+    with open("tests/tasks.json", "r", encoding="utf-8") as f:
+        tasks_data = json.load(f)
+        tasks = tasks_data["tasks"]
 
     nova.start()
     for i, prompt in enumerate(tasks, 1):
@@ -51,7 +49,8 @@ def run_test():
         
         # 結果をログに記録
         logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
-        logging.info(f"応答: {result.response.actProcessEnglishExplanation}")
+        logging.info(f"応答: {ast.literal_eval(result.response)["actProcessEnglishExplanation"]}")
+        
         
         results.append({
             "task": i,
