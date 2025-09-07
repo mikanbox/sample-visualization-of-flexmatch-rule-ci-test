@@ -1,0 +1,47 @@
+name: Nova-Act E2E
+# 発火タイミング
+on:
+  push:
+    branches: ['dev','main']
+  workflow_dispatch:
+
+# 権限
+permissions:
+  contents: read
+
+
+jobs:
+  nova-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python env
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+      - name: Install nova-act
+        run: |
+          python -m pip install --upgrade pip
+          pip install nova-act
+      - name: check nova-act version
+        run: pip list
+
+      - name: Checkout (clone) target repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run Nova Act tests
+        id: run-tests
+        env:
+          NOVA_ACT_API_KEY: ${{ secrets.NOVA_ACT_API_KEY }}
+        run: |
+          python tests/main.py 
+
