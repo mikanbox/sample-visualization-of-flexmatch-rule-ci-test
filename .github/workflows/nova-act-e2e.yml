@@ -39,7 +39,11 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Run Nova Act tests
+      - name: Run local server
+        run: npm run dev &
+
+
+      - name: === Run Nova-Act tests ===
         id: run-tests
         env:
           NOVA_ACT_API_KEY: ${{ secrets.NOVA_ACT_API_KEY }}
