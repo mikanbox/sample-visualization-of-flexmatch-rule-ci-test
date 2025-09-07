@@ -40,7 +40,8 @@ def run_test():
         "FlexMatch JSON ルールをロードするボタンをクリックして",
         "いずれかのルールを選択して",
         "OKを押して JSON をロードして",
-        "Visualize ボタンを押して"
+        "Visualize ボタンを押して",
+        "表示されたルールの名前とチーム構造を確認して"
     ]
 
     nova.start()
