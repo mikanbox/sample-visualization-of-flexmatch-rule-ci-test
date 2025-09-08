@@ -25,6 +25,7 @@ jobs:
 
       - name: Install nova-act
         run: |
+          cd tests
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
       
