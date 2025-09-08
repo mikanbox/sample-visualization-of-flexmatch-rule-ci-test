@@ -2,9 +2,11 @@
 name = "nova-act-qa-e2e-test"
 version = "0.1.0"
 requires-python = ">= 3.13"
-dependencies = [
+
+[project.optional-dependencies]
+dev = [
     "nova-act",
-    "pytest"
+    "pytest",
 ]
 
 [build-system]
@@ -14,3 +16,4 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
+python_functions = ["test_*", "run_test"]

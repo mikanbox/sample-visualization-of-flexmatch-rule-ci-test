@@ -21,7 +21,7 @@ def run_test():
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler(log_file),
+            # logging.FileHandler(log_file),
             logging.StreamHandler()
         ]
     )
@@ -89,7 +89,8 @@ def run_test():
     logging.info(f"合計実行時間: {duration:.2f}秒")
     logging.info(f"サマリーを {summary_file} に出力しました")
         
-    return 0  # 成功
+    # pytestのテスト関数は値を返すべきではない
+    assert True  # テストが成功したことを示す
 
 
 
