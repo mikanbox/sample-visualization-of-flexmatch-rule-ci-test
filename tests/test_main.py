@@ -45,20 +45,34 @@ def run_test():
     nova.start()
     for i, prompt in enumerate(tasks, 1):
         logging.info(f"タスク {i}: {prompt}")
-        result = nova.act(prompt, schema=ActResults.model_json_schema())
-        
-        # 結果をログに記録
-        logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
-        response_data = json.loads(result.response)
-        logging.info(f"応答: {response_data["actProcessEnglishExplanation"]}")
-        
-        results.append({
-            "task": i,
-            "prompt": prompt,
-            "response": result.response,
-            "steps": result.metadata.num_steps_executed,
-            "act_id": result.metadata.act_id
-        })
+        try:
+            result = nova.act(prompt, schema=ActResults.model_json_schema())
+            
+            # 結果をログに記録
+            logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
+            response_data = json.loads(result.response)
+            logging.info(f"応答: {response_data["actProcessEnglishExplanation"]}")
+            
+            results.append({
+                "task": i,
+                "prompt": prompt,
+                "response": result.response,
+                "steps": result.metadata.num_steps_executed,
+                "act_id": result.metadata.act_id,
+                "error": False  # エラーなし
+            })
+        except Exception as e:
+            # エラーをログに記録
+            logging.error(f"エラー: {str(e)}")
+            
+            results.append({
+                "task": i,
+                "prompt": prompt,
+                "response": str(e),
+                "steps": 0,
+                "act_id": None,
+                "error": True  # エラーあり
+            })
 
 
 
@@ -79,10 +93,26 @@ def run_test():
         f.write(f"タスク数: {len(tasks)}\n")
         f.write(f"合計時間: {duration:.2f}秒\n\n")
         
+        success_count = 0
+        failure_count = 0
+        
         for result in results:
-            f.write(f"タスク {result['task']}: {result['prompt']}\n")
+            status = "✗" if result.get('error', False) else "✓"
+            
+            if result.get('error', False):
+                failure_count += 1
+            else:
+                success_count += 1
+            
+            f.write(f"{status} タスク {result['task']}: {result['prompt']}\n")
             f.write(f"ステップ数: {result['steps']}\n")
             f.write(f"応答: {result['response']}\n\n")
+        
+        # サマリー情報を追加
+        f.write(f"\n=== テスト結果サマリー ===\n")
+        f.write(f"成功: {success_count} タスク\n")
+        f.write(f"失敗: {failure_count} タスク\n")
+        f.write(f"合計: {len(tasks)} タスク\n")
     
     logging.info(f"=== 実行完了 ===")
     logging.info(f"合計タスク数: {len(tasks)}")
