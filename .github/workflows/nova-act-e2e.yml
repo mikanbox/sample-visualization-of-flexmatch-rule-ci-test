@@ -1,4 +1,4 @@
-name: Nova-Act E2E
+name: Nova-Act-QA E2E Tests 
 # 発火タイミング
 on:
   push:
@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout (clone) target repository
+        uses: actions/checkout@v4
+
       - name: Set up Python env
         uses: actions/setup-python@v6
         with:
@@ -23,13 +26,10 @@ jobs:
       - name: Install nova-act
         run: |
           python -m pip install --upgrade pip
-          pip install nova-act
+          pip install -e ".[dev]"
       
       - name: check nova-act version
         run: pip list
-
-      - name: Checkout (clone) target repository
-        uses: actions/checkout@v4
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -42,14 +42,26 @@ jobs:
       - name: Run local server
         run: npm run dev &
 
-
       - name: === Run Nova-Act tests ===
         id: run-tests
         env:
           NOVA_ACT_API_KEY: ${{ secrets.NOVA_ACT_API_KEY }}
         run: |
-          python tests/main.py 
+          python -m pytest tests/ -v 
       
-      - name: Upload GitHub Summary
-        run: cat nova_act_summary.txt >> $GITHUB_STEP_SUMMARY
-
+      - name: Upload test results to GitHub Summary
+        if: always()  # テストが失敗しても実行
+        run: |
+          if [ -f nova_act_summary.txt ]; then
+            cat nova_act_summary.txt >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Archive test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            nova_act_summary.txt
+            tests/reports/
+          retention-days: 1

@@ -49,8 +49,8 @@ def run_test():
         
         # 結果をログに記録
         logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
-        logging.info(f"応答: {ast.literal_eval(result.response)["actProcessEnglishExplanation"]}")
-        
+        response_data = json.loads(result.response)
+        logging.info(f"応答: {response_data["actProcessEnglishExplanation"]}")
         
         results.append({
             "task": i,
