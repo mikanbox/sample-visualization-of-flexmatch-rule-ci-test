@@ -8,6 +8,7 @@ on:
 # 権限
 permissions:
   contents: read
+  checks: write
 
 
 jobs:
@@ -72,5 +73,3 @@ jobs:
       #       nova_act_summary.txt
       #       tests/reports/
       #     retention-days: 1
-
-
