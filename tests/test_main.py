@@ -23,6 +23,45 @@ class ActResults(BaseModel):
     actProcessEnglishExplanation: str
     actResultEnglishExplanation: str
 
+def test_Select_EvenlyRule():
+    with NovaAct(
+        starting_page="https://nova.amazon.com/act",
+        ignore_https_errors=True, 
+        headless=True,
+    ) as nova:
+        result = nova.act("Load FlexMatch Preset Rule を押して、Evenly matched teams を選択して", schema=ActResults.model_json_schema())
+        # 結果をログに記録
+        logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
+        response_data = json.loads(result.response)
+        logging.info(f"応答: {response_data["actProcessEnglishExplanation"]}")
+        assert True  # テストが成功したことを示す
+
+def test_Select_BlockListRule():
+    with NovaAct(
+        starting_page="https://nova.amazon.com/act",
+        ignore_https_errors=True, 
+        headless=True,
+    ) as nova:
+        result = nova.act("Load FlexMatch Preset Rule を押して、Player's block list を選択して", schema=ActResults.model_json_schema())
+        # 結果をログに記録
+        logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
+        response_data = json.loads(result.response)
+        logging.info(f"応答: {response_data["actProcessEnglishExplanation"]}")
+        assert True  # テストが成功したことを示す
+
+def test_Select_SelectComplundRule():
+    with NovaAct(
+        starting_page="https://nova.amazon.com/act",
+        ignore_https_errors=True, 
+        headless=True,
+    ) as nova:
+        result = nova.act("Load FlexMatch Preset Rule Match players with compound Rule を選択して", schema=ActResults.model_json_schema())
+        # 結果をログに記録
+        logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
+        response_data = json.loads(result.response)
+        logging.info(f"応答: {response_data["actProcessEnglishExplanation"]}")
+        assert True  # テストが成功したことを示す
+
 
 
 def test_Long_Scneraio():
@@ -54,8 +93,6 @@ def test_basic_run():
     results = []
 
 
-
-    
     # タスクリストをJSONファイルから読み込む
     with open("tests/tasks.json", "r", encoding="utf-8") as f:
         tasks_data = json.load(f)
