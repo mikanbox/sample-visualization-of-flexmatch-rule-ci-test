@@ -15,7 +15,7 @@ class ActResults(BaseModel):
 def test_scenario1():
     nova = NovaAct(starting_page="http://localhost:5173/", 
             ignore_https_errors=True, 
-            headless=False,
+            headless=True,
             )
     nova.start()
     nova.act("Load FlexMatch Preset Rule を押して、Evenly matched teams を選択して OKを押し、Visualization を押して", schema=ActResults.model_json_schema())
@@ -24,7 +24,7 @@ def test_scenario1():
 def test_scenario2():
     nova = NovaAct(starting_page="http://localhost:5173/", 
             ignore_https_errors=True, 
-            headless=False,
+            headless=True,
             )
     nova.start()
     nova.act("Load FlexMatch Preset Rule を押して", schema=ActResults.model_json_schema())
@@ -37,7 +37,7 @@ def test_basic_run():
     results = []
     nova = NovaAct(starting_page="http://localhost:5173/", 
                ignore_https_errors=True, 
-               headless=False,
+               headless=True,
                )
     
     # タスクリストをJSONファイルから読み込む
