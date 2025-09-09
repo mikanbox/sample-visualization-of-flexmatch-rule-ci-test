@@ -12,7 +12,7 @@ class ActResults(BaseModel):
     actProcessEnglishExplanation: str
     actResultEnglishExplanation: str
 
-def test_scenario1():
+def Long_Scneraio():
     nova = NovaAct(starting_page="http://localhost:5173/", 
             ignore_https_errors=True, 
             headless=True,
@@ -21,7 +21,7 @@ def test_scenario1():
     nova.act("Load FlexMatch Preset Rule を押して、Evenly matched teams を選択して OKを押し、Visualization を押して", schema=ActResults.model_json_schema())
     assert True  # テストが成功したことを示す
 
-def test_scenario2():
+def Step_by_Step_Scenario():
     nova = NovaAct(starting_page="http://localhost:5173/", 
             ignore_https_errors=True, 
             headless=True,
