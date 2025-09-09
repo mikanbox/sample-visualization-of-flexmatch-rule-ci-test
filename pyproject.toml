@@ -17,3 +17,6 @@ build-backend = "setuptools.build_meta"
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = ["test_*", "run_test"]
+filterwarnings = [
+    "ignore::pytest.PytestUnhandledThreadExceptionWarning:nova_act.impl.keyboard_event_watcher"
+]
