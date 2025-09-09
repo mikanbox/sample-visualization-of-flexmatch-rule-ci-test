@@ -56,20 +56,3 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: tests/*.xml
-
-      # - name: Upload test results to GitHub Summary
-      #   if: always()  # テストが失敗しても実行
-      #   run: |
-      #     if [ -f nova_act_summary.txt ]; then
-      #       cat nova_act_summary.txt >> $GITHUB_STEP_SUMMARY
-      #     fi
-      
-      # - name: Archive test artifacts
-      #   if: always()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: test-results
-      #     path: |
-      #       nova_act_summary.txt
-      #       tests/reports/
-      #     retention-days: 1

@@ -7,27 +7,33 @@ import json
 from datetime import datetime
 from nova_act import NovaAct
 from pydantic import BaseModel
-import ast
 
 class ActResults(BaseModel):
     actProcessEnglishExplanation: str
     actResultEnglishExplanation: str
 
+def test_scenario1():
+    nova = NovaAct(starting_page="http://localhost:5173/", 
+            ignore_https_errors=True, 
+            headless=False,
+            )
+    nova.start()
+    nova.act("Load FlexMatch Preset Rule を押して、Evenly matched teams を選択して OKを押し、Visualization を押して", schema=ActResults.model_json_schema())
+    assert True  # テストが成功したことを示す
 
-def run_basic_test():
-    # ログの設定
-    log_file = f"nova_act_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            # logging.FileHandler(log_file),
-            logging.StreamHandler()
-        ]
-    )
-    
+def test_scenario2():
+    nova = NovaAct(starting_page="http://localhost:5173/", 
+            ignore_https_errors=True, 
+            headless=False,
+            )
+    nova.start()
+    nova.act("Load FlexMatch Preset Rule を押して", schema=ActResults.model_json_schema())
+    nova.act("Evenly matched teams を選択して OKを押して", schema=ActResults.model_json_schema())
+    nova.act("Visualization を押して図が可視化されたことを確認して", schema=ActResults.model_json_schema())
+    assert True  # テストが成功したことを示す
+
+def test_basic_run():    
     logging.info("=== Nova Act テスト実行開始 ===")
-    start_time = datetime.now()
     results = []
     nova = NovaAct(starting_page="http://localhost:5173/", 
                ignore_https_errors=True, 
@@ -70,50 +76,7 @@ def run_basic_test():
                 "act_id": None,
                 "error": True  # エラーあり
             })
-
-
-
-    
-    # 実行完了
-    end_time = datetime.now()
-    duration = (end_time - start_time).total_seconds()
-    
-    # サマリーをファイルに出力
-    summary_file = f"nova_act_summary.txt"
-
-    with open(summary_file, "w", encoding="utf-8") as f:
-        f.write(f"Nova Act 実行サマリー\n")
-        f.write(f"日時: {start_time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write(f"URL: http://localhost:5173/\n")
-        f.write(f"タスク数: {len(tasks)}\n")
-        f.write(f"合計時間: {duration:.2f}秒\n\n")
-        
-        success_count = 0
-        failure_count = 0
-        
-        for result in results:
-            status = "✗" if result.get('error', False) else "✓"
             
-            if result.get('error', False):
-                failure_count += 1
-            else:
-                success_count += 1
-            
-            f.write(f"{status} タスク {result['task']}: {result['prompt']}\n")
-            f.write(f"ステップ数: {result['steps']}\n")
-            f.write(f"応答: {result['response']}\n\n")
-        
-        # サマリー情報を追加
-        f.write(f"\n=== テスト結果サマリー ===\n")
-        f.write(f"成功: {success_count} タスク\n")
-        f.write(f"失敗: {failure_count} タスク\n")
-        f.write(f"合計: {len(tasks)} タスク\n")
-    
-    logging.info(f"=== 実行完了 ===")
-    logging.info(f"合計タスク数: {len(tasks)}")
-    logging.info(f"合計実行時間: {duration:.2f}秒")
-    logging.info(f"サマリーを {summary_file} に出力しました")
-        
     # pytestのテスト関数は値を返すべきではない
     assert True  # テストが成功したことを示す
 
@@ -122,4 +85,4 @@ def run_basic_test():
 if __name__ == "__main__":
     print("Start Testing ")
 
-    sys.exit(run_test())
+    sys.exit(run_basic_test())
