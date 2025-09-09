@@ -8,26 +8,43 @@ from datetime import datetime
 from nova_act import NovaAct
 from pydantic import BaseModel
 
+# ログの設定
+log_file = f"tests/nova_act_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_file),
+        logging.StreamHandler()
+    ]
+)
+
 class ActResults(BaseModel):
     actProcessEnglishExplanation: str
     actResultEnglishExplanation: str
 
-def Long_Scneraio():
+
+
+def test_Long_Scneraio():
     nova = NovaAct(starting_page="http://localhost:5173/", 
             ignore_https_errors=True, 
             headless=True,
             )
     nova.start()
-    nova.act("Load FlexMatch Preset Rule を押して、Evenly matched teams を選択して OKを押し、Visualization を押して", schema=ActResults.model_json_schema())
+    result = nova.act("Load FlexMatch Preset Rule を押して、Evenly matched teams を選択して OKを押し、Visualization を押して", schema=ActResults.model_json_schema())
+    # 結果をログに記録
+    logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
+    response_data = json.loads(result.response)
+    logging.info(f"応答: {response_data["actProcessEnglishExplanation"]}")
     assert True  # テストが成功したことを示す
 
-def Step_by_Step_Scenario():
+def test_Step_by_Step_Scenario():
     nova = NovaAct(starting_page="http://localhost:5173/", 
             ignore_https_errors=True, 
             headless=True,
             )
     nova.start()
-    nova.act("Load FlexMatch Preset Rule を押して", schema=ActResults.model_json_schema())
+    result = nova.act("Load FlexMatch Preset Rule を押して", schema=ActResults.model_json_schema())
     nova.act("Evenly matched teams を選択して OKを押して", schema=ActResults.model_json_schema())
     nova.act("Visualization を押して図が可視化されたことを確認して", schema=ActResults.model_json_schema())
     assert True  # テストが成功したことを示す
