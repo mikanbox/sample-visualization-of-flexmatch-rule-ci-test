@@ -29,7 +29,7 @@ def test_Select_EvenlyRule():
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
-        result = nova.act("Load FlexMatch Preset Rule を押して、Evenly matched teams を選択して", schema=ActResults.model_json_schema())
+        result = nova.act("Push 'Load FlexMatch Preset Rule' Button and select `Evenly matched teams` on pop-up window", schema=ActResults.model_json_schema())
         # 結果をログに記録
         logging.info(f"完了: ステップ数={result.metadata.num_steps_executed}")
         response_data = json.loads(result.response)
