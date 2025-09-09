@@ -14,7 +14,7 @@ class ActResults(BaseModel):
     actResultEnglishExplanation: str
 
 
-def run_test():
+def run_basic_test():
     # ログの設定
     log_file = f"nova_act_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     logging.basicConfig(
@@ -26,15 +26,12 @@ def run_test():
         ]
     )
     
-
     logging.info("=== Nova Act テスト実行開始 ===")
     start_time = datetime.now()
-    
     results = []
-
     nova = NovaAct(starting_page="http://localhost:5173/", 
                ignore_https_errors=True, 
-               headless=True,
+               headless=False,
                )
     
     # タスクリストをJSONファイルから読み込む
@@ -73,8 +70,6 @@ def run_test():
                 "act_id": None,
                 "error": True  # エラーあり
             })
-
-
 
 
 
