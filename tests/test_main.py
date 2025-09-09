@@ -106,7 +106,7 @@ def test_basic_run():
     with open("tests/tasks.json", "r", encoding="utf-8") as f:
         tasks_data = json.load(f)
         tasks = tasks_data["tasks"]
-
+        
     with NovaAct(
         starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
