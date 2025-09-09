@@ -23,6 +23,15 @@ class ActResults(BaseModel):
     actProcessEnglishExplanation: str
     actResultEnglishExplanation: str
 
+def test_SimpleRule():
+    with NovaAct(
+        starting_page="https://nova.amazon.com/act",
+        ignore_https_errors=True, 
+        headless=True,
+    ) as nova:
+        result = nova.act("Push 'Load FlexMatch Preset Rule`", schema=ActResults.model_json_schema())
+        assert True  # テストが成功したことを示す
+
 def test_Select_EvenlyRule():
     with NovaAct(
         starting_page="https://nova.amazon.com/act",
