@@ -25,7 +25,7 @@ class ActResults(BaseModel):
 
 def test_SimpleRule():
     with NovaAct(
-        starting_page="https://nova.amazon.com/act",
+        starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
@@ -34,7 +34,7 @@ def test_SimpleRule():
 
 def test_Select_EvenlyRule():
     with NovaAct(
-        starting_page="https://nova.amazon.com/act",
+        starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
@@ -47,7 +47,7 @@ def test_Select_EvenlyRule():
 
 def test_Select_BlockListRule():
     with NovaAct(
-        starting_page="https://nova.amazon.com/act",
+        starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
@@ -60,7 +60,7 @@ def test_Select_BlockListRule():
 
 def test_Select_SelectComplundRule():
     with NovaAct(
-        starting_page="https://nova.amazon.com/act",
+        starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
@@ -75,7 +75,7 @@ def test_Select_SelectComplundRule():
 
 def test_Long_Scneraio():
     with NovaAct(
-        starting_page="https://nova.amazon.com/act",
+        starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
@@ -88,7 +88,7 @@ def test_Long_Scneraio():
 
 def test_Step_by_Step_Scenario():
     with NovaAct(
-        starting_page="https://nova.amazon.com/act",
+        starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
@@ -108,7 +108,7 @@ def test_basic_run():
         tasks = tasks_data["tasks"]
 
     with NovaAct(
-        starting_page="https://nova.amazon.com/act",
+        starting_page="http://localhost:5173/",
         ignore_https_errors=True, 
         headless=True,
     ) as nova:
